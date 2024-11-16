@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Input, List } from "antd";
+import { Button, Checkbox, Input, List } from "antd";
+import { DeleteOutlined, DownOutlined, UpOutlined } from "@ant-design/icons";
 
 function ToDo() {
   const [task, setTask] = useState([]);
@@ -11,6 +12,7 @@ function ToDo() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    addTask();
   };
 
   function addTask() {
@@ -60,7 +62,7 @@ function ToDo() {
   return (
     <>
       <div className="container">
-        <h1>TODO LIST</h1>
+        <h1 style={{ color: "#ddd" }}>TODO LIST</h1>
 
         <form onSubmit={handleSubmit}>
           <div className="flex">
@@ -88,33 +90,43 @@ function ToDo() {
               <List.Item
                 key={index}
                 actions={[
-                  <a
-                    key="list-loadmore-compelete"
-                    onClick={() => completeTask(index)}
-                  >
-                    {item.completed ? "undo" : "complete"}
+                  <a key="up" onClick={() => moveTaskUp(index)}>
+                    <UpOutlined />
                   </a>,
-                  <a key="list-loadmore-more" onClick={() => moveTaskUp(index)}>
-                    up
+                  <a key="down" onClick={() => moveTaskDown(index)}>
+                    <DownOutlined />
                   </a>,
                   <a
-                    key="list-loadmore-more"
-                    onClick={() => moveTaskDown(index)}
+                    style={{
+                      color: "#ff4d4f",
+                    }}
+                    key="list-loadmore-edit"
+                    onClick={() => deleteTask(index)}
                   >
-                    down
-                  </a>,
-                  <a key="list-loadmore-edit" onClick={() => deleteTask(index)}>
-                    delete
+                    <DeleteOutlined />
                   </a>,
                 ]}
               >
-                <p
-                  style={{
-                    textDecoration: item.completed ? "line-through" : "none",
-                  }}
-                >
-                  {item.title}
-                </p>
+                <div className="flex gap-2">
+                  <Checkbox
+                    checked={item.completed}
+                    onChange={() => {
+                      completeTask(index);
+                    }}
+                  />
+                  <div>
+                    <p
+                      style={{
+                        textAlign: "left",
+                        textDecoration: item.completed
+                          ? "line-through"
+                          : "none",
+                      }}
+                    >
+                      {item.title}
+                    </p>
+                  </div>
+                </div>
               </List.Item>
             )}
           />
